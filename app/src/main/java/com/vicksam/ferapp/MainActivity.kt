@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             savedInstanceState?.getSerializable(KEY_LENS_FACING) as Facing? ?: Facing.BACK
         setupCamera(lensFacing)
 
-        // Load model
+        // Cargar modelo
         FerModel.load(this)
 
         setupObservers()
