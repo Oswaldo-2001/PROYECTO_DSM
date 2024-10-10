@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <!-- Vista de la cámara -->
+    <com.otaliastudios.cameraview.CameraView
+        android:id="@+id/viewfinder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:keepScreenOn="true" />
+
+    <!-- Superposición para los límites de la cara -->
+    <husaynhakeem.io.facedetector.FaceBoundsOverlay
+        android:id="@+id/faceBoundsOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Botón para alternar la cámara -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/toggleCameraButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/toggle_camera"
+        android:src="@drawable/ic_switch_camera" />
+
+    <!-- Cuadro blanco con el botón de Resultados -->
+    <RelativeLayout
+        android:id="@+id/cuadro"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom"
+        android:background="@android:color/white">
+
+        <!-- Botón de Resultados -->
+        <Button
+            android:id="@+id/buttonResultados"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="RESULTADOS"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#81D4FA" />
+    </RelativeLayout>
+
+    <!-- Panel celeste que cubrirá toda la pantalla -->
+    <RelativeLayout
+        android:id="@+id/panelCeleste"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#BBDEFB"
+        android:layout_gravity="center"
+        android:visibility="gone">
+
+        <!-- TextView para mostrar los porcentajes -->
+        <TextView
+            android:id="@+id/textViewResults"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Resultados"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:layout_centerInParent="true" />
+
+        <!-- Botón de Retroceder -->
+        <Button
+            android:id="@+id/buttonRetroceder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Retroceder"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#81D4FA"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="32dp" />
+    </RelativeLayout>
+
+    <!-- Fecha -->
+    <TextView
+        android:id="@+id/textViewDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_gravity="bottom|start"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp" />
+
+</FrameLayout>
+
+

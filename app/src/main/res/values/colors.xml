@@ -1,0 +1,7 @@
+<resources>
+    <color name="light_blue">#BBDEFB</color> <!-- Celeste claro (colorPrimary) -->
+    <color name="blue_variant">#64B5F6</color> <!-- Variante de celeste (colorPrimaryVariant) -->
+    <color name="soft_blue">#B3E5FC</color> <!-- Celeste suave (colorSecondary) -->
+    <color name="soft_blue_variant">#81D4FA</color> <!-- Variante de celeste suave (colorSecondaryVariant) -->
+    <color name="white">#FFFFFF</color> <!-- Blanco para textos o fondo -->
+</resources>
