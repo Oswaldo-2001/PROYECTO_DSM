@@ -8,9 +8,16 @@ import android.database.sqlite.SQLiteOpenHelper
 class sqlLiteHelper(context: Context) : SQLiteOpenHelper(
     context, "registroEmocional.db", null, 1) {
     override fun onCreate(db: SQLiteDatabase?) {
-        val ordenCreacion = "CREATE TABLE registroEmocional " +
-                "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "Paciente INTEGER, Fecha TEXT, Emociones TEXT)"
+        val ordenCreacion = """
+            CREATE TABLE registroEmocional (
+                _id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                Paciente INTEGER, 
+                Fecha TEXT, 
+                Emociones TEXT, 
+                Precision REAL, 
+                Error REAL
+            )
+        """.trimIndent()
         db!!.execSQL(ordenCreacion)
 
     }
@@ -21,11 +28,14 @@ class sqlLiteHelper(context: Context) : SQLiteOpenHelper(
         onCreate(db)
     }
 
-    fun addData(paciente: String, fecha: String, emocion: String) {
-        val datos = ContentValues()
-        datos.put("Paciente", paciente)
-        datos.put("Fecha", fecha)
-        datos.put("Emociones", emocion)
+    fun addData(paciente: String, fecha: String, emocion: String, precision: Float, error: Float) {
+        val datos = ContentValues().apply {
+            put("Paciente", paciente)
+            put("Fecha", fecha)
+            put("Emociones", emocion)
+            put("Precision", precision)
+            put("Error", error)
+        }
 
         val db = this.writableDatabase
         db.insert("registroEmocional", null, datos)

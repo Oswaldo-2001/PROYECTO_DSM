@@ -53,13 +53,21 @@ class MainActivity : AppCompatActivity() {
                 val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
                 val currentDateTime = sdf.format(Date())
                 val percentages = viewModel.getEmotionPercentages()
-                // Convertir los porcentajes a un string
-                val emotionsText = percentages.entries.joinToString(", ") { (emotion, percentage) ->
-                    "$emotion: ${"%.2f".format(percentage)}%"
+                val predominantEmotion = percentages.maxByOrNull { it.value }
+                if (predominantEmotion != null) {
+                    val emotion = predominantEmotion.key
+                    val percentage = predominantEmotion.value
+                    val precision = percentage
+                    val error = percentages.filter { it.key != emotion }.values.sum()
+                    dbHelper.addData(
+                        paciente = "1",  // Identificador del paciente, puedes cambiarlo por una variable si es necesario
+                        fecha = currentDateTime,  // Fecha actual
+                        emocion = emotion,  // Emoción predominante
+                        precision = precision,  // Precisión (porcentaje de la emoción predominante)
+                        error = error  // Error (suma de los porcentajes de las otras emociones)
+                    )
                 }
-                // Guardar en la base de datos
-                dbHelper.addData("1", currentDateTime, emotionsText)
-                handler.postDelayed(this, 5000)
+                handler.postDelayed(this, 5000)  // Ejecutar cada 5 segundos
             }
         }
 
@@ -113,26 +121,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showStoredEmotions() {
-        // Obtener los registros de la base de datos
         val db = dbHelper.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM registroEmocional", null)
-
-        // Construir el texto con los datos de la tabla
         val storedResults = StringBuilder()
         if (cursor.moveToFirst()) {
             do {
-                val paciente = cursor.getString(cursor.getColumnIndexOrThrow("Paciente"))
                 val fecha = cursor.getString(cursor.getColumnIndexOrThrow("Fecha"))
                 val emociones = cursor.getString(cursor.getColumnIndexOrThrow("Emociones"))
-                storedResults.append("Paciente: $paciente\nFecha: $fecha\nEmociones: $emociones\n\n")
+                val precision = cursor.getFloat(cursor.getColumnIndexOrThrow("Precision"))
+                val error = cursor.getFloat(cursor.getColumnIndexOrThrow("Error"))
+
+                // Añadir los resultados al StringBuilder, sin mostrar el paciente
+                storedResults.append("Fecha: $fecha\n")
+                storedResults.append("Emociones: $emociones\n")
+                storedResults.append("Precisión: ${"%.2f".format(precision)}%\n")
+                storedResults.append("Error: ${"%.2f".format(error)}%\n\n")
             } while (cursor.moveToNext())
         }
         cursor.close()
-
-        // Mostrar los resultados en el TextView
         val textViewResults = findViewById<TextView>(R.id.textViewResults)
         textViewResults.text = storedResults.toString()
     }
+
 
     private fun setupObservers() {
         viewModel.emotionLabels().observe(this, {
