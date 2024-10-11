@@ -41,35 +41,7 @@ Historial de detección: Los datos de cada sesión, que incluyen la fecha, hora 
 Panel de resultados: Al presionar el botón "Resultados", el usuario puede acceder a un panel que muestra el historial de emociones detectadas, proporcionando un resumen de las emociones por fecha y hora.
 
 #Estructura del Proyecto
-Proyecto_DSM/(con variaciones a futuro para nuevas funciones
-│
-├── app/
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/com/vicksam/ferapp/
-│   │   │   │   ├── MainActivity.kt          # Actividad principal que maneja la cámara y la interfaz
-│   │   │   │   ├── FerViewModel.kt          # Gestión de la lógica de negocio y observación de datos de emociones
-│   │   │   │   ├── FerModel.kt              # Carga y manejo del modelo de detección de emociones
-│   │   │   │   ├── sqlLiteHelper.kt         # Clase para interactuar con la base de datos SQLite
-│   │   │   │   └── ... (otras clases y archivos)
-│   │   │   ├── res/
-│   │   │   │   ├── layout/activity_main.xml # Layout de la interfaz principal de la aplicación
-│   │   │   │   ├── values/strings.xml       # Textos y recursos de la interfaz
-│   │   │   │   └── ... (otros recursos gráficos)
-│   └── ... (otros archivos de configuración)
-├── facedetector/
-│   ├── src/main/java/husaynhakeem/io/facedetector/
-│   │   ├── FaceDetector.kt                  # Lógica para la detección de rostros usando la cámara
-│   │   ├── FaceBounds.kt                    # Clase para definir los límites de los rostros detectados
-│   │   ├── FaceDetectorUtils.kt             # Utilidades para el procesamiento de las imágenes
-│   │   └── ... (otras clases)
-├── images/                                  # Imágenes y recursos gráficos para la documentación
-├── gradle/                                  # Configuración de Gradle
-├── build.gradle                             # Configuración del proyecto
-├── settings.gradle                          # Configuración de módulos del proyecto
-├── privacy_policy.md                        # Política de privacidad de la aplicación
-└── README.md                                # Documentación del proyecto
-
+El proyecto Sisvita está estructurado de manera organizada para facilitar el desarrollo y la gestión de su código. La carpeta principal app contiene el código fuente de la aplicación, incluyendo el paquete com/vicksam/ferapp/, donde se encuentran archivos clave como MainActivity.kt, que maneja la lógica principal de la cámara y la interfaz de usuario, y FerViewModel.kt, encargado de la gestión de la lógica de negocio y la observación de los datos de emociones. Además, FerModel.kt se encarga de la carga y gestión del modelo de detección de emociones, mientras que sqlLiteHelper.kt maneja la interacción con la base de datos local SQLite para almacenar los registros de las emociones detectadas.
 # Tecnologías Utilizadas
 Kotlin: Lenguaje de programación utilizado para implementar la lógica de la aplicación y la interacción con la cámara.
 Android Camera: Bibliotecas utilizadas para manejar la cámara del dispositivo, permitiendo la captura de imágenes de alta calidad,detección de rostros 
