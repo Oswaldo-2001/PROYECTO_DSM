@@ -48,7 +48,8 @@ Android Camera: Bibliotecas utilizadas para manejar la cámara del dispositivo, 
 y la clasificación de emociones a partir de las expresiones faciales,con el objetivo de identificar emociones como alegría, tristeza y enojo.
 SQLitehelper: Base de datos embebida utilizada para almacenar el historial de detecciones de emociones, permitiendo guardar y consultar los registros de forma local en el dispositivo.
 Gradle: Herramienta de construcción y gestión de dependencias, utilizada para configurar el entorno de desarrollo y las bibliotecas necesarias.
-#Contribuciones
+
+# Contribuciones
 Sebastian24-stack
 unmsm-jcrs
 Oswaldo-2001
