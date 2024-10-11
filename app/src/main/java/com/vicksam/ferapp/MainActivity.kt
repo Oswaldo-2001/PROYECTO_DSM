@@ -2,6 +2,8 @@ package com.vicksam.ferapp
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Size
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -23,8 +25,13 @@ import android.view.View
 import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.Toast
+import com.vicksam.ferapp.data.sqlLiteHelper
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var handler: Handler
+    private lateinit var runnable: Runnable
+    private lateinit var dbHelper: sqlLiteHelper
+
 
     private val viewModel = ViewModelProvider
         .NewInstanceFactory()
@@ -33,7 +40,31 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        // Inicializar el handler
+        handler = Handler(Looper.getMainLooper())
 
+        // Inicializar la base de datos
+        dbHelper = sqlLiteHelper(this)
+
+        // Definir el Runnable para mostrar el Toast cada segundo
+        runnable = object : Runnable {
+            override fun run() {
+                // Obtener la fecha y las emociones
+                val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+                val currentDateTime = sdf.format(Date())
+                val percentages = viewModel.getEmotionPercentages()
+                // Convertir los porcentajes a un string
+                val emotionsText = percentages.entries.joinToString(", ") { (emotion, percentage) ->
+                    "$emotion: ${"%.2f".format(percentage)}%"
+                }
+                // Guardar en la base de datos
+                dbHelper.addData("1", currentDateTime, emotionsText)
+                handler.postDelayed(this, 5000)
+            }
+        }
+
+        // Iniciar la ejecución repetida
+        handler.post(runnable)
         // Referencia al botón de resultados y al panel celeste
         val buttonResultados = findViewById<Button>(R.id.buttonResultados)
         val panelCeleste = findViewById<RelativeLayout>(R.id.panelCeleste)
@@ -41,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 
         // Mostrar los porcentajes de emociones detectadas al presionar el botón "RESULTADOS"
         buttonResultados.setOnClickListener {
-            showEmotionPercentages()
+            showStoredEmotions()
             panelCeleste.visibility = View.VISIBLE
         }
 
@@ -51,11 +82,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.resetEmotionCount()
         }
 
-        // Llamar a la función para mostrar la fecha
-        showCurrentDate()
-
-        val lensFacing =
-            savedInstanceState?.getSerializable(KEY_LENS_FACING) as Facing? ?: Facing.BACK
+        val lensFacing = Facing.FRONT
         setupCamera(lensFacing)
 
         // Cargar modelo
@@ -81,7 +108,30 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        handler.removeCallbacks(runnable)
         viewfinder.destroy()
+    }
+
+    private fun showStoredEmotions() {
+        // Obtener los registros de la base de datos
+        val db = dbHelper.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM registroEmocional", null)
+
+        // Construir el texto con los datos de la tabla
+        val storedResults = StringBuilder()
+        if (cursor.moveToFirst()) {
+            do {
+                val paciente = cursor.getString(cursor.getColumnIndexOrThrow("Paciente"))
+                val fecha = cursor.getString(cursor.getColumnIndexOrThrow("Fecha"))
+                val emociones = cursor.getString(cursor.getColumnIndexOrThrow("Emociones"))
+                storedResults.append("Paciente: $paciente\nFecha: $fecha\nEmociones: $emociones\n\n")
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+
+        // Mostrar los resultados en el TextView
+        val textViewResults = findViewById<TextView>(R.id.textViewResults)
+        textViewResults.text = storedResults.toString()
     }
 
     private fun setupObservers() {
@@ -109,35 +159,7 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         }
-
-        toggleCameraButton.setOnClickListener {
-            viewfinder.toggleFacing()
-        }
     }
-
-    private fun showCurrentDate() {
-        // Obtener el TextView para la fecha
-        val textViewDate = findViewById<TextView>(R.id.textViewDate)
-
-        // Obtener la fecha actual
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val currentDate = sdf.format(Date())
-
-        // Establecer la fecha en el TextView
-        textViewDate.text = currentDate
-    }
-
-    private fun showEmotionPercentages() {
-        val percentages = viewModel.getEmotionPercentages()
-        val resultsText = percentages.entries.joinToString("\n") { (emotion, percentage) ->
-            "$emotion: ${"%.2f".format(percentage)}%"
-        }
-
-        // Mostrar los resultados en el TextView en lugar de un Toast
-        val textViewResults = findViewById<TextView>(R.id.textViewResults)
-        textViewResults.text = resultsText
-    }
-
 
     private fun FaceDetector.setup() = run {
         setOnFaceDetectionListener(object : FaceDetector.OnFaceDetectionResultListener {
@@ -152,6 +174,7 @@ class MainActivity : AppCompatActivity() {
         private const val KEY_LENS_FACING = "key-lens-facing"
         private const val MAX_PREVIEW_WIDTH = 480
     }
+
 }
 
 
