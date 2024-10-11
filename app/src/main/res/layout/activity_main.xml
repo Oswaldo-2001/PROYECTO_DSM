@@ -35,7 +35,9 @@
             android:text="RESULTADOS"
             android:textSize="16sp"
             android:textColor="@android:color/white"
-            android:backgroundTint="#81D4FA" />
+            android:backgroundTint="#81D4FA"
+            android:fontFamily="@font/kodchasan_regular" /> <!-- Cambiar aquí -->
+
     </RelativeLayout>
 
     <!-- Panel celeste que cubrirá toda la pantalla -->
@@ -55,7 +57,8 @@
             android:text="Resultados"
             android:textSize="24sp"
             android:gravity="center"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/kodchasan_regular" /> <!-- Cambiar aquí -->
 
         <!-- Botón de Retroceder -->
         <Button
@@ -68,7 +71,9 @@
             android:backgroundTint="#81D4FA"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="32dp" />
+            android:layout_marginBottom="32dp"
+            android:fontFamily="@font/kodchasan_regular" /> <!-- Cambiar aquí -->
+
     </RelativeLayout>
 
     <!-- Fecha -->
@@ -80,8 +85,8 @@
         android:textColor="@android:color/black"
         android:layout_gravity="bottom|start"
         android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/kodchasan_regular" /> <!-- Cambiar aquí -->
 
 </FrameLayout>
-
 
