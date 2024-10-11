@@ -28,7 +28,7 @@ Sisvita permite a los usuarios detectar y analizar emociones como alegría, tris
 - Dispositivo Android o emulador con cámara
 
 ## Instalación
-1. Clona el repositorio en tu máquina local:
+1. Clonar el repositorio:
    ```bash
    git clone https://github.com/Oswaldo-2001/PROYECTO_DSM.git
   #Uso
