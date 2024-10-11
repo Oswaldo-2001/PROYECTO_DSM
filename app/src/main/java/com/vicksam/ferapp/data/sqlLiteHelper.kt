@@ -41,5 +41,11 @@ class sqlLiteHelper(context: Context) : SQLiteOpenHelper(
         db.insert("registroEmocional", null, datos)
         db.close()
     }
+
+    fun deleteData() {
+        val db = this.writableDatabase
+        db.execSQL("DELETE FROM registroEmocional")
+        db.close()
+    }
 }
 

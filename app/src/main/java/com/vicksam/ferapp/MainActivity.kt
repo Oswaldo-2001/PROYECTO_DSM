@@ -53,21 +53,35 @@ class MainActivity : AppCompatActivity() {
                 val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
                 val currentDateTime = sdf.format(Date())
                 val percentages = viewModel.getEmotionPercentages()
-                val predominantEmotion = percentages.maxByOrNull { it.value }
-                if (predominantEmotion != null) {
-                    val emotion = predominantEmotion.key
-                    val percentage = predominantEmotion.value
+
+
+                val predominantEmotionEntry = percentages.maxByOrNull { it.value }
+                if (predominantEmotionEntry != null) {
+                    val emotion = predominantEmotionEntry.key
+                    val percentage = predominantEmotionEntry.value
+
+                    val otherEmotionsPercentages = percentages.filter { it.key != emotion }.values
+                    val error = if (otherEmotionsPercentages.isNotEmpty()) {
+                        otherEmotionsPercentages.average()
+                    } else {
+                        0.0
+                    }
+                    // Precisión: el porcentaje de la emoción predominante
                     val precision = percentage
-                    val error = percentages.filter { it.key != emotion }.values.sum()
+
+                    // Guardar en la base de datos
                     dbHelper.addData(
-                        paciente = "1",  // Identificador del paciente, puedes cambiarlo por una variable si es necesario
-                        fecha = currentDateTime,  // Fecha actual
-                        emocion = emotion,  // Emoción predominante
-                        precision = precision,  // Precisión (porcentaje de la emoción predominante)
-                        error = error  // Error (suma de los porcentajes de las otras emociones)
+                        paciente = "1", // Puedes cambiar "1" si quieres especificar otro paciente
+                        fecha = currentDateTime,
+                        emocion = emotion,
+                        precision = precision.toFloat(),
+                        error = error.toFloat()
                     )
                 }
-                handler.postDelayed(this, 5000)  // Ejecutar cada 5 segundos
+
+
+
+                handler.postDelayed(this, 5000)
             }
         }
 
