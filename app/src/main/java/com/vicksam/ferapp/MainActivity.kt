@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showStoredEmotions() {
         val db = dbHelper.readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM registroEmocional", null)
+        val cursor = db.rawQuery("SELECT * FROM registroEmocional ORDER BY _id DESC", null)
         val storedResults = StringBuilder()
         if (cursor.moveToFirst()) {
             do {
